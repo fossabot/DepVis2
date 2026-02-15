@@ -62,7 +62,7 @@ const ProjectDetailPage = () => {
               <span>{project.name}</span>
             </InfoRow>
 
-            <InfoRow label="GitHub link">
+            <InfoRow label="Git Link">
               <a
                 href={project.projectLink}
                 target="_blank"
