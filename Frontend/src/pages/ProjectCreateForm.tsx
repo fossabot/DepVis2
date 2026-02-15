@@ -26,7 +26,7 @@ const ProjectSchema = z
     {
       path: ["selectedBranches", "selectedTags"],
       message: "At least one branch or tag must be selected",
-    }
+    },
   );
 
 type FormValues = z.infer<typeof ProjectSchema>;
@@ -112,7 +112,7 @@ const ProjectCreateForm = () => {
         <div className="space-y-1">
           <div className="flex gap-2 w-full items-end">
             <InputButton
-              title="GitHub Link"
+              title="Git Link"
               {...register("projectLink")}
               className="w-full"
               placeholder="https://github.com/owner/repo"
@@ -128,7 +128,8 @@ const ProjectCreateForm = () => {
 
           {gitError && (
             <p className="text-xs text-red-500">
-              Couldn’t fetch repository info. Check the URL or your credentials.
+              Couldn't fetch repository info. Check if the URL is correct and
+              the repo is public.
             </p>
           )}
         </div>
