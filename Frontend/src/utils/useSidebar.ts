@@ -6,6 +6,7 @@ import {
   CircleDashed,
   History,
   Settings,
+  ArrowLeftRight,
 } from "lucide-react";
 import { useParams, useLocation } from "react-router-dom";
 
@@ -42,6 +43,11 @@ const useSidebar = () => {
       title: "Graph",
       url: `/${id}/graph`,
       icon: CircleDashed,
+    },
+    {
+      title: "Compare",
+      url: `/${id}/compare`,
+      icon: ArrowLeftRight,
     },
     {
       title: "Branch History",

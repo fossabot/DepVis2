@@ -48,6 +48,16 @@ public class ProjectBranchesController(
         return Ok(detailed);
     }
 
+    [HttpGet("{branchId}/compare/{comparedWith}")]
+    public async Task<ActionResult<ProjectStatsDto>> GetBranchComparison(
+        Guid branchId,
+        Guid comparedWith
+    )
+    {
+        var stats = await branchService.GetComparison(branchId, comparedWith);
+        return stats is null ? NotFound() : Ok(stats);
+    }
+
     [HttpGet("{projectId}/stats")]
     public async Task<ActionResult<ProjectStatsDto>> GetProjectStats(Guid projectId)
     {

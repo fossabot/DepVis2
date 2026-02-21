@@ -12,10 +12,14 @@ public class ProjectService(ProjectRepository repo, IPublishEndpoint publishEndp
     public async Task<EditProjectDto?> GetEditProject(Guid id)
     {
         var project = await repo.GetByIdAsync(id);
-        return project is null ? null :
-            new EditProjectDto()
+        return project is null
+            ? null
+            : new EditProjectDto()
             {
-                Branches = project.ProjectBranches.Where(x => !x.IsTag).Select(x => x.Name).ToList(),
+                Branches = project
+                    .ProjectBranches.Where(x => !x.IsTag)
+                    .Select(x => x.Name)
+                    .ToList(),
                 Tags = project.ProjectBranches.Where(x => x.IsTag).Select(x => x.Name).ToList(),
                 Name = project.Name,
                 ProjectLink = project.ProjectLink,
@@ -67,7 +71,7 @@ public class ProjectService(ProjectRepository repo, IPublishEndpoint publishEndp
 
         await repo.AddAsync(project);
 
-        await PublishBranchesForProcessing([..project.ProjectBranches], project.ProjectLink);
+        await PublishBranchesForProcessing([.. project.ProjectBranches], project.ProjectLink);
 
         return project.MapToDto();
     }
@@ -81,30 +85,42 @@ public class ProjectService(ProjectRepository repo, IPublishEndpoint publishEndp
         if (project is null)
             return false;
 
-        var newBranches = dto.Branches.Select(b => new ProjectBranch
-        {
-            IsTag = false,
-            Name = b,
-            ProjectId = id,
-        }).ToList();
+        var newBranches = dto
+            .Branches.Select(b => new ProjectBranch
+            {
+                IsTag = false,
+                Name = b,
+                ProjectId = id,
+            })
+            .ToList();
 
-        var newTags = dto.Tags.Select(t => new ProjectBranch
-        {
-            IsTag = true,
-            Name = t,
-            ProjectId = id,
-        }).ToList();
+        var newTags = dto
+            .Tags.Select(t => new ProjectBranch
+            {
+                IsTag = true,
+                Name = t,
+                ProjectId = id,
+            })
+            .ToList();
 
         var combinedBranches = newBranches.Concat(newTags).ToList();
 
-        var branchesToRemove = project.ProjectBranches
-            .Where(existingBranch => !combinedBranches.Any(newBranch => newBranch.Name == existingBranch.Name && newBranch.IsTag == existingBranch.IsTag))
+        var branchesToRemove = project
+            .ProjectBranches.Where(existingBranch =>
+                !combinedBranches.Any(newBranch =>
+                    newBranch.Name == existingBranch.Name && newBranch.IsTag == existingBranch.IsTag
+                )
+            )
             .ToList();
 
         await repo.RemoveBranchesAsync(project.Id, branchesToRemove.Select(x => x.Name).ToList());
 
         var branchesToAdd = combinedBranches
-            .Where(newBranch => !project.ProjectBranches.Any(existingBranch => existingBranch.Name == newBranch.Name && existingBranch.IsTag == newBranch.IsTag))
+            .Where(newBranch =>
+                !project.ProjectBranches.Any(existingBranch =>
+                    existingBranch.Name == newBranch.Name && existingBranch.IsTag == newBranch.IsTag
+                )
+            )
             .ToList();
 
         await repo.AddBranchesAsync(branchesToAdd);
@@ -124,7 +140,10 @@ public class ProjectService(ProjectRepository repo, IPublishEndpoint publishEndp
         return true;
     }
 
-    private async Task PublishBranchesForProcessing(List<ProjectBranch> branches, string projectLink)
+    private async Task PublishBranchesForProcessing(
+        List<ProjectBranch> branches,
+        string projectLink
+    )
     {
         foreach (var branch in branches)
         {

@@ -1,4 +1,5 @@
-﻿using DepVis.Core.Dtos;
+﻿using System.Net.WebSockets;
+using DepVis.Core.Dtos;
 using DepVis.Core.Extensions;
 using DepVis.Core.Repositories;
 using DepVis.Shared.Messages;
@@ -32,6 +33,47 @@ public class ProjectBranchService(ProjectBranchRepository repo, IPublishEndpoint
                 Location = branch.Name,
                 IsTag = branch.IsTag,
             }
+        );
+    }
+
+    public async Task<BranchCompareDto> GetComparison(Guid mainBranch, Guid comparedBranchId)
+    {
+        var branchTask = repo.GetCompareDataAsync(mainBranch);
+        var comparedTask = repo.GetCompareDataAsync(comparedBranchId);
+        await Task.WhenAll(branchTask, comparedTask);
+
+        var mainBranchData = branchTask.Result!;
+        var comparedBranchData = comparedTask.Result!;
+
+        var branchPackages = mainBranchData.PackageNames;
+        var comparedPackages = comparedBranchData.PackageNames;
+
+        var branchPackageSet = new HashSet<string>(mainBranchData.PackageNames);
+        var comparedPackageSet = new HashSet<string>(comparedBranchData.PackageNames);
+
+        var addedPackages = mainBranchData
+            .PackageNames.Where(p => !comparedPackageSet.Contains(p))
+            .ToList();
+
+        var removedPackages = comparedBranchData
+            .PackageNames.Where(p => !branchPackageSet.Contains(p))
+            .ToList();
+
+        var sourceVulnIds = new HashSet<string>(mainBranchData.VulnerabilityIds);
+        var targetVulnIds = new HashSet<string>(comparedBranchData.VulnerabilityIds);
+
+        var addedVulnerabilityIds = sourceVulnIds.Except(targetVulnIds).ToList();
+        var removedVulnerabilityIds = targetVulnIds.Except(sourceVulnIds).ToList();
+
+        return new BranchCompareDto(
+            addedPackages,
+            removedPackages,
+            addedVulnerabilityIds,
+            removedVulnerabilityIds,
+            branchPackages.Count,
+            comparedPackages.Count,
+            sourceVulnIds.Count,
+            targetVulnIds.Count
         );
     }
 

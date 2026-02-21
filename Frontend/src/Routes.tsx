@@ -9,6 +9,7 @@ import Packages from "./pages/Packages/Packages";
 import Vulnerabilities from "./pages/Vulnerabilities";
 import BranchHistory from "./pages/BranchHistory/BranchHistory";
 import ProjectEditPage from "./pages/ProjectEditPage";
+import ComparePage from "./pages/ComparePage";
 
 const Routes = () => {
   return (
@@ -30,6 +31,7 @@ const Routes = () => {
         <Route path="/:id/packages" element={<Packages />} />
         <Route path="/:id/vulnerabilities" element={<Vulnerabilities />} />
         <Route path="/:id/graph" element={<Graph />} />
+        <Route path="/:id/compare" element={<ComparePage />} />
         <Route path="/:id/branch-history" element={<BranchHistory />} />
       </Route>
     </RoutesReactRouter>

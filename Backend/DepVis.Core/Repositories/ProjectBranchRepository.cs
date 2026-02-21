@@ -14,6 +14,24 @@ public class ProjectBranchRepository(DepVisDbContext context, MinioStorageServic
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
 
+    public async Task<BranchCompareDataModel> GetCompareDataAsync(Guid id)
+    {
+        var baseQuery = context
+            .SbomPackages.AsNoTracking()
+            .Where(p => p.Sbom.ProjectBranchId == id || p.Sbom.BranchHistoryId == id);
+
+        var packageNamesTask = baseQuery.Select(p => p.Name).Distinct().ToListAsync();
+
+        var vulnerabilityIdsTask = baseQuery
+            .SelectMany(p => p.Vulnerabilities.Select(v => v.Id))
+            .Distinct()
+            .ToListAsync();
+
+        await Task.WhenAll(packageNamesTask, vulnerabilityIdsTask);
+
+        return new BranchCompareDataModel(id, packageNamesTask.Result, vulnerabilityIdsTask.Result);
+    }
+
     public async Task<List<ProjectBranch>> GetByProjectAsync(Guid projectId) =>
         await context
             .ProjectBranches.AsNoTracking()
