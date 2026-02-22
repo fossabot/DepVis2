@@ -72,9 +72,9 @@ const ComparePage = () => {
   return (
     <div className="flex flex-col gap-4">
       <PageHeader
-        title="Branch Comparison"
-        description="Compare packages and vulnerabilities between branches"
-        secondaryDescription="Select two branches (and optional commits) to see what changed."
+        title="Compare"
+        description="Compare packages and vulnerabilities between sources"
+        secondaryDescription="Select two sources to see what changed."
       >
         <div className="min-w-0 flex-1">
           <div className="mb-2 text-xs font-medium text-muted-foreground">
