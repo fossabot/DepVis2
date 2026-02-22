@@ -1,5 +1,5 @@
-import BranchSelector from "@/components/BranchSelector";
 import { PieCustomChart } from "@/components/chart/PieCustomChart";
+import PageHeader from "@/components/PageHeader";
 import { DataTable } from "@/components/table/DataTable";
 import VulnerabilityCard from "@/components/VulnerabilityCard";
 import {
@@ -113,7 +113,11 @@ const Vulnerabilities = () => {
   return (
     <div className="flex flex-col gap-3 w-full h-full">
       <div className="flex flex-col w-full h-full justify-evenly gap-2">
-        <BranchSelector />
+        <PageHeader
+          title="Vulnerabilities"
+          description="View and analyze vulnerabilities in the selected source"
+        />
+
         {!isLoadingBranch && branch && (
           <div className="flex flex-row gap-10 w-full h-full justify-evenly">
             <div className="h-max-full w-1/2">

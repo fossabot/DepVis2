@@ -1,4 +1,3 @@
-import BranchSelector from "@/components/BranchSelector";
 import {
   useLazyGetPackagesExportQuery,
   useLazyGetPackagesQuery,
@@ -23,6 +22,7 @@ import {
 } from "@tanstack/react-table";
 import { useCallback, useEffect, useState } from "react";
 import PackagesInfo from "./Components/PackagesInfo";
+import PageHeader from "@/components/PageHeader";
 
 const Packages = () => {
   const { branch, commit, isLoading: isLoadingBranch } = useBranch();
@@ -115,7 +115,10 @@ const Packages = () => {
   return (
     <div className="flex flex-col gap-3 w-full h-full">
       <div className="flex flex-col w-full h-full items-startjustify-evenly gap-2">
-        <BranchSelector />
+        <PageHeader
+          title="Packages"
+          description="View and analyze packages in the selected source"
+        />
         <PackagesInfo
           data={data}
           isLoading={isLoading || !isSuccess || isLoadingBranch}

@@ -1,4 +1,3 @@
-import BranchSelector from "@/components/BranchSelector";
 import { XYChart } from "@/components/chart/XYChart";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -11,24 +10,31 @@ import { useBranch } from "@/utils/hooks/BranchProvider";
 import { RefreshCcw } from "lucide-react";
 import ViewSelector, { ViewType } from "./Components/ViewSelector";
 import { useState } from "react";
+import PageHeader from "@/components/PageHeader";
 
 const BranchHistory = () => {
+  const [selectedView, setSelectedView] = useState(ViewType.Both);
+
   return (
     <div className="flex flex-col gap-3 w-full h-full  max-h-full">
-      <BranchSelector onlyBranches hideCommits />
-      <History />
+      <PageHeader
+        title="Branch History"
+        description="View and analyze branch history for the selected branch"
+      >
+        <ViewSelector selected={selectedView} onSelect={setSelectedView} />
+      </PageHeader>
+      <History selectedView={selectedView} />
     </div>
   );
 };
 
-const History = () => {
+const History = ({ selectedView }: { selectedView: ViewType }) => {
   const { branch } = useBranch();
   const {
     isFetching: isLoading,
     data,
     refetch,
   } = useGetBranchHistoryQuery(branch ? branch.id : "", { skip: !branch });
-  const [selectedView, setSelectedView] = useState(ViewType.Both);
   const [mutate] = useProcessBranchHistoryMutation();
 
   const onProcessHistoryClick = async () => {
@@ -77,7 +83,6 @@ const History = () => {
 
   return (
     <div className="h-full w-full flex flex-col justify-start">
-      <ViewSelector selected={selectedView} onSelect={setSelectedView} />
       <div className="h-full max-h-10/12 flex flex-row items-start justify-center gap-2 pt-8">
         {selectedView !== ViewType.Vulnerabilities && (
           <XYChart

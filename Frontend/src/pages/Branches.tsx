@@ -26,6 +26,7 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import PageHeader from "@/components/PageHeader";
 
 const Branches = () => {
   const projectId = useGetProjectId();
@@ -86,6 +87,10 @@ const Branches = () => {
 
   return (
     <div className="flex flex-col gap-3 w-full h-full">
+      <PageHeader
+        title="Branches"
+        description="View and analyze branches in the selected project"
+      />
       <div className="flex flex-row gap-10 w-full h-full justify-evenly">
         <div className="h-max-full w-2/3">
           <DataTable

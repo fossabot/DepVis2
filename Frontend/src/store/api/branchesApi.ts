@@ -38,21 +38,17 @@ export const projectApi = projectsApi.injectEndpoints({
         `/${id}/branches/detailed${odata ? `?${odata}` : ""}`,
       providesTags: ["Branches"],
     }),
-    getProjectBranchesDetailedExport: builder.query<
-      BranchComparison,
-      IdWithOdata
-    >({
+    getProjectBranchesDetailedExport: builder.query<Blob, IdWithOdata>({
       query: ({ id, odata }) => ({
         responseHandler: (response) => response.blob(),
         url: `/${id}/branches/detailed?$export=true${odata ? `&${odata}` : ""}`,
       }),
     }),
     getBranchComparison: builder.query<
-      Blob,
+      BranchComparison,
       { branchId: string; compareToBranchId: string }
     >({
       query: ({ branchId, compareToBranchId }) => ({
-        responseHandler: (response) => response.blob(),
         url: `/${branchId}/compare/${compareToBranchId}`,
       }),
     }),

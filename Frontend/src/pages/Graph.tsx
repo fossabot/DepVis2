@@ -1,4 +1,4 @@
-import BranchSelector from "@/components/BranchSelector";
+import { GlobalBranchSelector } from "@/components/BranchSelector";
 import SimpleGraph, { type GraphNames } from "@/components/graph/SimpleGraph";
 import ParentsSelector from "@/components/graph/GraphMisc/ParentsSelector";
 import Separator from "@/components/Separator";
@@ -46,7 +46,7 @@ const Graph = () => {
   return (
     <div className="h-[calc(100vh-5rem)] max-h-[calc(100vh-5rem)] w-[calc(100vw-25rem)] max-w-[calc(100vw-25rem)] overflow-hidden">
       <div className="flex flex-row gap-4 border-2 rounded-2xl  p-4 absolute top-20 z-1000 bg-white ">
-        <BranchSelector />
+        <GlobalBranchSelector />
         <Button variant={"outline"} onClick={onExportClick} className="mt-5">
           Export Graph
         </Button>

@@ -38,12 +38,8 @@ public class ProjectBranchService(ProjectBranchRepository repo, IPublishEndpoint
 
     public async Task<BranchCompareDto> GetComparison(Guid mainBranch, Guid comparedBranchId)
     {
-        var branchTask = repo.GetCompareDataAsync(mainBranch);
-        var comparedTask = repo.GetCompareDataAsync(comparedBranchId);
-        await Task.WhenAll(branchTask, comparedTask);
-
-        var mainBranchData = branchTask.Result!;
-        var comparedBranchData = comparedTask.Result!;
+        var mainBranchData = await repo.GetCompareDataAsync(mainBranch);
+        var comparedBranchData = await repo.GetCompareDataAsync(comparedBranchId);
 
         var branchPackages = mainBranchData.PackageNames;
         var comparedPackages = comparedBranchData.PackageNames;
