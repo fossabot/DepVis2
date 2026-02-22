@@ -43,6 +43,8 @@ const ComparePage = () => {
 
   const comparison = data as BranchComparison | undefined;
 
+  const comparedBranchName = `${compareBranch?.name ?? ""} ${compareCommit?.commitName ? "- " + compareCommit.commitName : ""}`;
+
   const derived = useMemo(() => {
     if (!comparison) return null;
 
@@ -74,7 +76,7 @@ const ComparePage = () => {
         description="Compare packages and vulnerabilities between branches"
         secondaryDescription="Select two branches (and optional commits) to see what changed."
       >
-        <>
+        <div className="min-w-0 flex-1">
           <div className="mb-2 text-xs font-medium text-muted-foreground">
             Compare to
           </div>
@@ -84,7 +86,7 @@ const ComparePage = () => {
             commit={compareCommit}
             setCommit={setCompareCommit}
           />
-        </>
+        </div>
       </PageHeader>
 
       {(isLoading || isFetching) && (
@@ -129,7 +131,7 @@ const ComparePage = () => {
               description="Total package count per side"
               leftLabel={`${branch?.name} ${commit?.commitName ? "- " + commit.commitName : ""}`}
               leftValue={comparison.mainBranchPackageCount}
-              rightLabel={`${compareBranch?.name} ${compareCommit?.commitName ? "- " + compareCommit.commitName : ""}`}
+              rightLabel={comparedBranchName}
               rightValue={comparison.comparedBranchPackageCount}
               delta={derived.packageDelta}
             />
@@ -138,7 +140,7 @@ const ComparePage = () => {
               description="Total vulnerability count per side"
               leftLabel={`${branch?.name} ${commit?.commitName ? "- " + commit.commitName : ""}`}
               leftValue={comparison.mainBranchVulnerabilityCount}
-              rightLabel={`${compareBranch?.name} ${compareCommit?.commitName ? "- " + compareCommit.commitName : ""}`}
+              rightLabel={comparedBranchName}
               rightValue={comparison.comparedBranchVulnerabilityCount}
               delta={derived.vulnDelta}
             />
@@ -212,25 +214,25 @@ const ComparePage = () => {
 
           <div className="grid gap-3 lg:grid-cols-2">
             <ListPanel
-              title="Added packages"
+              title={`Added packages (in ${comparedBranchName})`}
               icon={<Plus className="h-4 w-4" />}
               items={comparison.addedPackages}
               emptyLabel="No packages were added."
             />
             <ListPanel
-              title="Removed packages"
+              title={`Removed packages (in ${comparedBranchName})`}
               icon={<Minus className="h-4 w-4" />}
               items={comparison.removedPackages}
               emptyLabel="No packages were removed."
             />
             <ListPanel
-              title="Added vulnerabilities"
+              title={`Added vulnerabilities (in ${comparedBranchName})`}
               icon={<Plus className="h-4 w-4" />}
               items={comparison.addedVulnerabilityIds}
               emptyLabel="No vulnerabilities were added."
             />
             <ListPanel
-              title="Removed vulnerabilities"
+              title={`Removed vulnerabilities (in ${comparedBranchName})`}
               icon={<Minus className="h-4 w-4" />}
               items={comparison.removedVulnerabilityIds}
               emptyLabel="No vulnerabilities were removed."

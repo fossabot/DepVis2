@@ -1,4 +1,3 @@
-import { GlobalBranchSelector } from "@/components/BranchSelector";
 import SimpleGraph, { type GraphNames } from "@/components/graph/SimpleGraph";
 import ParentsSelector from "@/components/graph/GraphMisc/ParentsSelector";
 import Separator from "@/components/Separator";
@@ -13,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useLazyGetProjectGraphExportQuery } from "@/store/api/projectsApi";
 import { downloadBlob } from "@/utils/downloadBlob";
 import { getPrettyDate } from "@/utils/dateHelper";
+import PageHeader from "@/components/PageHeader";
 
 const Graph = () => {
   const { branch, commit } = useBranch();
@@ -45,25 +45,33 @@ const Graph = () => {
   };
   return (
     <div className="h-[calc(100vh-5rem)] max-h-[calc(100vh-5rem)] w-[calc(100vw-25rem)] max-w-[calc(100vw-25rem)] overflow-hidden">
-      <div className="flex flex-row gap-4 border-2 rounded-2xl  p-4 absolute top-20 z-1000 bg-white ">
-        <GlobalBranchSelector />
-        <Button variant={"outline"} onClick={onExportClick} className="mt-5">
-          Export Graph
-        </Button>
-        <Separator />
-        <SeveritySelector
-          selected={selectedSeverity}
-          onSelect={setSelectedSeverity}
-        />
-        <Separator />
-        <NamesSelector selected={showNames} onSelect={setShowNames} />
-        {selectedSeverity && (
-          <>
-            <Separator />
-            <ParentsSelector selected={showParents} onSelect={setShowParents} />
-          </>
-        )}
-      </div>
+      <PageHeader
+        title="Dependency Graph"
+        description="Visualize and analyze the dependency graph for the selected source"
+      >
+        <div className="flex flex-row gap-2">
+          <Button variant={"outline"} onClick={onExportClick} className="mt-5">
+            Export Graph
+          </Button>
+          <Separator />
+          <SeveritySelector
+            selected={selectedSeverity}
+            onSelect={setSelectedSeverity}
+          />
+          <Separator />
+          <NamesSelector selected={showNames} onSelect={setShowNames} />
+          {selectedSeverity && (
+            <>
+              <Separator />
+              <ParentsSelector
+                selected={showParents}
+                onSelect={setShowParents}
+              />
+            </>
+          )}
+        </div>
+      </PageHeader>
+
       <Legend />
       <NodeInformation packageId={selectedNode} onClose={onInformationClose} />
       {branch && (

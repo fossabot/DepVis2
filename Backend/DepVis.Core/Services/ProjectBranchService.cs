@@ -47,19 +47,19 @@ public class ProjectBranchService(ProjectBranchRepository repo, IPublishEndpoint
         var branchPackageSet = new HashSet<string>(mainBranchData.PackageNames);
         var comparedPackageSet = new HashSet<string>(comparedBranchData.PackageNames);
 
-        var addedPackages = mainBranchData
+        var removedPackages = mainBranchData
             .PackageNames.Where(p => !comparedPackageSet.Contains(p))
             .ToList();
 
-        var removedPackages = comparedBranchData
+        var addedPackages = comparedBranchData
             .PackageNames.Where(p => !branchPackageSet.Contains(p))
             .ToList();
 
         var sourceVulnIds = new HashSet<string>(mainBranchData.VulnerabilityIds);
         var targetVulnIds = new HashSet<string>(comparedBranchData.VulnerabilityIds);
 
-        var addedVulnerabilityIds = sourceVulnIds.Except(targetVulnIds).ToList();
-        var removedVulnerabilityIds = targetVulnIds.Except(sourceVulnIds).ToList();
+        var removedVulnerabilityIds = sourceVulnIds.Except(targetVulnIds).ToList();
+        var addedVulnerabilityIds = targetVulnIds.Except(sourceVulnIds).ToList();
 
         return new BranchCompareDto(
             addedPackages,

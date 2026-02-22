@@ -88,6 +88,7 @@ const Branches = () => {
   return (
     <div className="flex flex-col gap-3 w-full h-full">
       <PageHeader
+        hideSelector
         title="Branches"
         description="View and analyze branches in the selected project"
       />

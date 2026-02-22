@@ -47,9 +47,6 @@ const StatCard = ({
           <div className="text-xs text-muted-foreground">Difference</div>
           <div className="flex items-center gap-2">
             <DeltaBadge delta={delta} />
-            <span className="text-xs text-muted-foreground tabular-nums">
-              {formatDelta(delta)}
-            </span>
           </div>
         </div>
       </CardContent>
