@@ -26,7 +26,7 @@ services:
       sqlserver:
         condition: service_healthy
     environment:
-      - ConnectionStrings__FrontEnd=http://147.251.115.226:8080
+      - ConnectionStrings__FrontEnd=${FRONTEND_URL}
       - ConnectionStrings__Database=Server=sqlserver,1433;Database=depvisTest;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True
       - ConnectionStrings__MinioEndpoint=minio
     networks:
@@ -43,7 +43,7 @@ services:
       sqlserver:
         condition: service_healthy
     environment:
-      - ConnectionStrings__FrontEnd=http://147.251.115.226:8080
+      - ConnectionStrings__FrontEnd=${FRONTEND_URL}
       - ConnectionStrings__Database=Server=sqlserver,1433;Database=depvisTest;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True
       - ConnectionStrings__MinioEndpoint=minio
     networks:
@@ -54,7 +54,7 @@ services:
       context: ./Frontend
       dockerfile: ./dockerfile
       args:
-        VITE_API_BASE_URL: "http://147.251.115.226:5000"
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
     container_name: DepVis2-Frontend
     depends_on:
       - depviscore
